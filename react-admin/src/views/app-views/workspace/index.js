@@ -23,6 +23,7 @@ const UserList = () => {
   const [condition, setCondition] = React.useState(true);
   const [table, setTable] = React.useState(false);
   const [list, setList] = useState([]);
+  const [type, setType] = useState(1);
   const tableColumns = [
     {
       title: "Original Word",
@@ -59,12 +60,28 @@ const UserList = () => {
             onClick={(e) => {
               setAfterText(afterText.substring(0, record.index) + record.suggestion + afterText.substring(record.index + record.origin.length, afterText.length))
               delElement(record.id, 'id', record.suggestion.length - record.origin.length);
-              if (!record.db && record.suggestion !== "Your suggestion") {
+              if (!record.db && record.suggestion !== "Your suggestion" && type == 3) {
                 const REQ_URL = 'http://localhost:5000/api/acronym';
-                // console.log(beforeText)
+                // console.log(record.origin, record.suggestion);
                 axios.post(`${REQ_URL}`, {
                   acronym: record.origin,
                   spellout: record.suggestion
+                }, {
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOjEsImlhdCI6MTYyMTg2NDY4OX0.CSQnjulYvsKewlUINhB__jrrsKAicXbyviVmgZ0zOYc`,
+                  }
+                }
+                ).then(
+                  (e) => console.log(e)
+                )
+              }
+              if (!record.db && record.suggestion !== "Your suggestion" && type == 4) {
+                const REQ_URL = 'http://localhost:5000/api/substitution';
+                // console.log(beforeText)
+                axios.post(`${REQ_URL}`, {
+                  substitution: record.origin,
+                  suggestion: record.suggestion
                 }, {
                   headers: {
                     "Content-Type": "application/json",
@@ -110,8 +127,9 @@ const UserList = () => {
       if (!flag) tmpList.push(tmp)
       else fg = true;
     }
-    // console.log(tmpList)
+
     setList(tmpList);
+
   }
   const copyClipBoard = () => {
     navigator.clipboard.writeText(afterText);
@@ -221,18 +239,70 @@ const UserList = () => {
   const start = () => {
     setTable(true);
     setAfterText(beforeText);
-    const REQ_URL = 'http://localhost:5000/api/process';
-    // console.log(beforeText)
-    axios.post(`${REQ_URL}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOjEsImlhdCI6MTYyMTg2NDY4OX0.CSQnjulYvsKewlUINhB__jrrsKAicXbyviVmgZ0zOYc`,
-      },
-      data: beforeText
-    }).then(e => {
-      // console.log(e.data)
-      setList(e.data)
-    });
+    request();
+  }
+
+  const request = () => {
+    if (type == 1 || type == 4) {
+      const REQ_URL = 'http://localhost:5000/api/grammar';
+      // console.log(beforeText)
+      axios.post(`${REQ_URL}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOjEsImlhdCI6MTYyMTg2NDY4OX0.CSQnjulYvsKewlUINhB__jrrsKAicXbyviVmgZ0zOYc`,
+        },
+        data: type == 1 ? beforeText : afterText
+      }).then(e => {
+        // console.log(e.data)
+        setList(e.data)
+      });
+    }
+
+    if (type == 2) {
+      console.log('dfdf');
+      const REQ_URL = 'http://localhost:5000/api/process';
+      // console.log(beforeText)
+      axios.post(`${REQ_URL}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOjEsImlhdCI6MTYyMTg2NDY4OX0.CSQnjulYvsKewlUINhB__jrrsKAicXbyviVmgZ0zOYc`,
+        },
+        data: afterText
+      }).then(e => {
+        // console.log(e.data)
+        setList(e.data)
+      });
+    }
+
+    if (type == 3) {
+      const REQ_URL = 'http://localhost:5000/api/project';
+      // console.log(beforeText)
+      axios.post(`${REQ_URL}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOjEsImlhdCI6MTYyMTg2NDY4OX0.CSQnjulYvsKewlUINhB__jrrsKAicXbyviVmgZ0zOYc`,
+        },
+        data: afterText
+      }).then(e => {
+        // console.log(e.data)
+        setList(e.data)
+      });
+    }
+
+    setType(type + 1);
+
+  }
+  const restart = () => {
+    setBeforeText('');
+    setAfterText('Sample text here!');
+    setBeforeScore(0);
+    setAfterScore(0);
+    setScore(0);
+    setWordCount(0);
+    setCondition(true);
+    setTable(false);
+    setList([]);
+    setType(1);
   }
 
   return (
@@ -269,6 +339,7 @@ const UserList = () => {
       </Row >
       <Row gutter={16}>
         <Col lg={24} >
+          {type > 1 && type < 5 && list == 0 ? <Button type="primary" style={{ marginLeft: "2em" }} onClick={() => request()}>Next Step</Button> : <Button type="primary" style={{ marginLeft: "2em" }} onClick={() => restart()}>Restart</Button>}
           {condition ? "" : table ? <Table style={{ marginLeft: '2em' }} columns={tableColumns} dataSource={list} rowKey="id2" />
             : <Button type="primary" style={{ marginLeft: "2em" }} onClick={() => start()}>Stop Typing</Button>}
         </Col>

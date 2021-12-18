@@ -1,33 +1,32 @@
-// const Grammarbot = require('grammarbot');
-
-// const bot = new Grammarbot();
-
-// // Callback style
-// // bot.check("I can't remember how to go their", function (error, result) {
-// //   if (!error) console.log(JSON.stringify(result));
-// // });
-
-// // Async/Await style
-// const myfunc = async () => {
-//   const result = await bot.checkAsync(`I know FIFA, which is my favorite and go school.`);
-//   console.log((result));
-// };
-// myfunc();
+const request = require('request');
 
 const express = require("express");
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
-  const Grammarbot = require('grammarbot');
+router.post("/", (req, res) => {
 
-  const bot = new Grammarbot();
   let json = [];
   let index = 0;
   let index2 = 0;
-  const myfunc = async () => {
-    const result = await bot.checkAsync(req.body.data);
 
+
+  const options = {
+    method: 'POST',
+    url: 'https://grammarbot.p.rapidapi.com/check',
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded',
+      'x-rapidapi-host': 'grammarbot.p.rapidapi.com',
+      'x-rapidapi-key': '75bd1424aemshfcbb450600ee3d4p1794c2jsne0bf7953c8a3',
+      useQueryString: true
+    },
+    form: { text: req.body.data, language: 'en-US' }
+  };
+
+  request(options, function (error, response, body) {
+    if (error) throw new Error(error);
+
+    const result = JSON.parse(body);
     result.matches.forEach(element => {
       element.replacements.forEach((e) => {
         json.push(
@@ -43,11 +42,12 @@ router.post("/", async (req, res) => {
       })
       index++;
     });
-    // console.log(json)
-    res.json(json);
-  };
 
-  myfunc();
+    res.json(json);
+  });
+
+
+
 });
 
 module.exports = router;

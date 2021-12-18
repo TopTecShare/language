@@ -18,6 +18,7 @@ router.post("/", (req, res) => {
     acronym: req.body.acronym,
     spellout: req.body.spellout,
   });
+
   newAcronym.save().then((result) => {
     res.json(result);
   });
