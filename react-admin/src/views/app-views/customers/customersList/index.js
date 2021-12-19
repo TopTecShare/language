@@ -171,7 +171,7 @@ function CustomerList() {
         <Form layout="vertical" name="control-hooks" initialValues={values}>
           <Row>
             <Col span={20} style={{ margin: "0 auto" }}>
-              <Form.Item
+              {/* <Form.Item
                 name="firstname"
                 label="First Name"
                 style={style}
@@ -200,7 +200,7 @@ function CustomerList() {
                     }))
                   }
                 />
-              </Form.Item>
+              </Form.Item> */}
               <Form.Item
                 name="email"
                 label="Email"

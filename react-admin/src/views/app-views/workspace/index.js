@@ -9,6 +9,7 @@ import { Col } from 'antd';
 import { Table } from 'antd';
 import { Statistic } from 'antd';
 import { CopyOutlined } from "@ant-design/icons";
+import { API_URL } from "../../../_utiles/config";
 const { TextArea } = Input;
 
 const UserList = () => {
@@ -61,7 +62,7 @@ const UserList = () => {
               setAfterText(afterText.substring(0, record.index) + record.suggestion + afterText.substring(record.index + record.origin.length, afterText.length))
               delElement(record.id, 'id', record.suggestion.length - record.origin.length);
               if (!record.db && record.suggestion !== "Your suggestion" && type == 3) {
-                const REQ_URL = 'http://localhost:5000/api/acronym';
+                const REQ_URL = API_URL + '/api/acronym';
                 // console.log(record.origin, record.suggestion);
                 axios.post(`${REQ_URL}`, {
                   acronym: record.origin,
@@ -77,7 +78,7 @@ const UserList = () => {
                 )
               }
               if (!record.db && record.suggestion !== "Your suggestion" && type == 4) {
-                const REQ_URL = 'http://localhost:5000/api/substitution';
+                const REQ_URL = API_URL + '/api/substitution';
                 // console.log(beforeText)
                 axios.post(`${REQ_URL}`, {
                   substitution: record.origin,
@@ -209,7 +210,7 @@ const UserList = () => {
       setBeforeScore(grade(beforeText));
       setCondition(words(beforeText) < 100);
       if (words(beforeText) >= 100) {
-        // const UNI_URL = 'http://localhost:5000/api/acronym';
+        // const UNI_URL = API_URL + '/api/acronym';
         // axios.get(`${UNI_URL}`, {
         //   headers: {
         //     "Content-Type": "application/json",
@@ -244,7 +245,7 @@ const UserList = () => {
 
   const request = () => {
     if (type == 1 || type == 4) {
-      const REQ_URL = 'http://localhost:5000/api/grammar';
+      const REQ_URL = API_URL + '/api/grammar';
       // console.log(beforeText)
       axios.post(`${REQ_URL}`, {
         headers: {
@@ -260,7 +261,7 @@ const UserList = () => {
 
     if (type == 2) {
       console.log('dfdf');
-      const REQ_URL = 'http://localhost:5000/api/process';
+      const REQ_URL = API_URL + '/api/process';
       // console.log(beforeText)
       axios.post(`${REQ_URL}`, {
         headers: {
@@ -275,7 +276,7 @@ const UserList = () => {
     }
 
     if (type == 3) {
-      const REQ_URL = 'http://localhost:5000/api/project';
+      const REQ_URL = API_URL + '/api/project';
       // console.log(beforeText)
       axios.post(`${REQ_URL}`, {
         headers: {

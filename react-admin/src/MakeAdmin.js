@@ -1,3 +1,5 @@
+import { API_URL } from "_utiles/config";
+const url = require('../config');
 var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -16,7 +18,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-fetch("http://localhost:5000/api/auth/add-user", requestOptions)
+fetch(API_URL + "/auth/add-user", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
   .catch(error => console.log('error', error));

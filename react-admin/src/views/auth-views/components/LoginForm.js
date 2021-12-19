@@ -50,7 +50,7 @@ export const LoginForm = (props) => {
 
   const onLogin = (values) => {
     showLoading();
-    console.log(values);
+    // console.log(values);
     signIn(values);
   };
 
@@ -130,11 +130,10 @@ export const LoginForm = (props) => {
           name="password"
           label={
             <div
-              className={`${
-                showForgetPassword
-                  ? "d-flex justify-content-between w-100 align-items-center"
-                  : ""
-              }`}
+              className={`${showForgetPassword
+                ? "d-flex justify-content-between w-100 align-items-center"
+                : ""
+                }`}
             >
               <span>Password</span>
               {showForgetPassword && (

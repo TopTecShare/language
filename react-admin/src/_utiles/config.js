@@ -1,7 +1,7 @@
-export const API_URL = "http://localhost:5000/api";
-export const BASE_URL = "http://localhost:5000";
-// export const API_URL = "http://35.152.99.26:5000/api";
-// export const BASE_URL = "http://35.152.99.26:5000";
+// export const API_URL = "http://localhost:5000/api";
+// export const BASE_URL = "http://localhost:5000";
+export const API_URL = "http://3.236.17.68:5000/api";
+export const BASE_URL = "http://3.236.17.68:5000";
 export const sampleClientFields = [
   "Identificacion",
   "Tipo_cliente",
